@@ -1,14 +1,28 @@
-# Utilizar una imagen base de PHP con Apache
-FROM php:7.4-apache
+# Usa una imagen base de PHP con Apache
+FROM php:8.2-apache
 
-# Instalar extensiones necesarias de PHP
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Actualiza e instala dependencias necesarias (en este ejemplo, se instalan extensiones comunes)
+RUN apt-get update && apt-get install -y \
+    $PHPIZE_DEPS \
+    libzip-dev \
+    zip \
+    cron \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# Copiar el contenido del proyecto al directorio raíz de Apache
-COPY . /var/www/html/
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /var/www/html
 
-# Establecer permisos adecuados
+# Copia el código de la aplicación al contenedor
+COPY . /var/www/html
+
+# Cambia el propietario de los archivos a www-data
 RUN chown -R www-data:www-data /var/www/html
 
-# Exponer el puerto 80
+# Opcional: configura ServerName para eliminar la advertencia de Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Expone el puerto 80
 EXPOSE 80
+
+# Comando para iniciar Apache en primer plano
+CMD ["apache2-foreground"]

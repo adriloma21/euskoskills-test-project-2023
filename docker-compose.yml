@@ -5,3 +5,9 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
+    environment:
+      DB_HOST: 172.20.227.241
+      DB_PORT: 3306
+      DB_DATABASE: skills_2023
+      DB_USERNAME: adrian
+      DB_PASSWORD: g]tHH[[iQC8oouw4
