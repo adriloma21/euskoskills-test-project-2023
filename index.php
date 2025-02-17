@@ -9,12 +9,14 @@ require_once 'model/db.php';
 
 if(!isset($_GET["controller"])) $_GET["controller"] = constant("DEFAULT_CONTROLLER");
 if(!isset($_GET["action"])) $_GET["action"] = constant("DEFAULT_ACTION");
-$controller_path = 'controller/' . $_GET["controller"] . 'Controller.php';
+
+$controller_path = 'controller/' . ucfirst($_GET["controller"]) . 'Controller.php';
+
 
 if(!file_exists($controller_path)) $controller_path = 'controller/' . constant("DEFAULT_CONTROLLER") . '.php';
 
 require_once $controller_path;
-$controllerName = $_GET["controller"] . 'Controller';
+$controllerName = ucfirst($_GET["controller"]) . 'Controller';
 $controller = new $controllerName();
 
 $dataToView["data"] = array();
