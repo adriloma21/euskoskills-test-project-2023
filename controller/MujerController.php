@@ -104,7 +104,7 @@ class MujerController
             if (isset($_FILES['fotografia']) && $_FILES['fotografia']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['fotografia']['tmp_name'];
                 $fileName = $_FILES['fotografia']['name'];
-                $uploadFileDir = '/recursos/images/';
+                $uploadFileDir = __DIR__ . '/../recursos/images/';
                 $destPath = $uploadFileDir . $fileName;
 
                 if (!is_dir($uploadFileDir)) {
