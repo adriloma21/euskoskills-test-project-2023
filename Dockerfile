@@ -16,8 +16,8 @@ COPY . /var/www/html
 
 # Crear la carpeta recursos/images antes de asignar permisos
 RUN mkdir -p /var/www/html/recursos/images && \
-    chown -R www-data:www-data /var/www/html && \
-    chmod -R 775 /var/www/html
+    chown -R www-data:www-data /var/www/html/recursos
+    chmod -R 775 /var/www/html/recursos
 
 # Opcional: configura ServerName para eliminar la advertencia de Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf

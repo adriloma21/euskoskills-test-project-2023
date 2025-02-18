@@ -93,76 +93,79 @@ class MujerController
         header("Location: index.php?controller=admin&action=dashboard");
     }
 
-    public function create()
-    {
-        $this->view = "create";
-        $this->page_title = "Crear Mujer";
+        public function create()
+        {
+            $this->view = "create";
+            $this->page_title = "Crear Mujer";
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $fotografia = null;
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $fotografia = null;
 
-            if (isset($_FILES['fotografia']) && $_FILES['fotografia']['error'] === UPLOAD_ERR_OK) {
-                $fileTmpPath = $_FILES['fotografia']['tmp_name'];
-                $fileName = $_FILES['fotografia']['name'];
-                $uploadFileDir = '/recursos/images/';
-                $destPath = $uploadFileDir . $fileName;
+                if (isset($_FILES['fotografia']) && $_FILES['fotografia']['error'] === UPLOAD_ERR_OK) {
+                    $fileTmpPath = $_FILES['fotografia']['tmp_name'];
+                    $fileName = $_FILES['fotografia']['name'];
+                    $uploadFileDir = '/var/www/html/recursos/images/';
+                    $destPath = $uploadFileDir . $fileName;
 
 
-                if (!is_dir($uploadFileDir)) {
-                    mkdir($uploadFileDir, 0777, true); // Crea la carpeta con permisos máximos
-                    chmod($uploadFileDir, 0777); // Asegurar permisos después de crearla
+                    if (!is_dir($uploadFileDir)) {
+                        if (!mkdir($uploadFileDir, 0777, true)) {
+                            echo "Failed to create directory.";
+                            return;
+                        }
+                        chmod($uploadFileDir, 0777); // Asegurar permisos después de crearla
+                    }
+
+                    if (move_uploaded_file($fileTmpPath, $destPath)) {
+                        $fotografia = $fileName;
+                    } else {
+                        // Manejar el error de subida de archivo
+                        echo "Error al subir la fotografía.";
+                        return;
+                    }
                 }
 
-                if (move_uploaded_file($fileTmpPath, $destPath)) {
-                    $fotografia = $fileName;
-                } else {
-                    // Manejar el error de subida de archivo
-                    echo "Error al subir la fotografía.";
-                    return;
-                }
+                $params = [
+                    'nombre' => $_POST['nombre'],
+                    'apellidos' => $_POST['apellidos'],
+                    'nacimiento' => $_POST['nacimiento'],
+                    'defuncion' => $_POST['defuncion'],
+                    'nacionalidad' => $_POST['nacionalidad'],
+                    'area' => $_POST['area'],
+                    'enlace' => $_POST['enlace'],
+                    'fotografia' => $fotografia,
+                    'descripcion' => $_POST['descripcion']
+                ];
+
+                $this->model->createMujer($params);
+
+                header("Location: index.php?controller=admin&action=dashboard");
+                exit();
+            } else {
+                $areas = $this->areaModel->getAreas();
+                $dataToView = [
+                    'areas' => $areas
+                ];
             }
 
-            $params = [
-                'nombre' => $_POST['nombre'],
-                'apellidos' => $_POST['apellidos'],
-                'nacimiento' => $_POST['nacimiento'],
-                'defuncion' => $_POST['defuncion'],
-                'nacionalidad' => $_POST['nacionalidad'],
-                'area' => $_POST['area'],
-                'enlace' => $_POST['enlace'],
-                'fotografia' => $fotografia,
-                'descripcion' => $_POST['descripcion']
-            ];
-
-            $this->model->createMujer($params);
-
-            header("Location: index.php?controller=admin&action=dashboard");
-            exit();
-        } else {
-            $areas = $this->areaModel->getAreas();
-            $dataToView = [
-                'areas' => $areas
-            ];
+            return $dataToView;
         }
 
-        return $dataToView;
-    }
+        public function juego()
+        {
+            $this->view = "juego";
+            $this->page_title = "Juego de Asociación";
 
-    public function juego()
-    {
-        $this->view = "juego";
-        $this->page_title = "Juego de Asociación";
+            $mujeres = $this->model->getRandomMujeres(10);
+            $areas = $this->areaModel->getAreas();
 
-        $mujeres = $this->model->getRandomMujeres(10);
-        $areas = $this->areaModel->getAreas();
+            $dataToView = [
+                'mujeres' => $mujeres,
+                'areas' => $areas
+            ];
 
-        $dataToView = [
-            'mujeres' => $mujeres,
-            'areas' => $areas
-        ];
-
-        return $dataToView;
-    }
+            return $dataToView;
+        }
 
     public function asociar()
     {
