@@ -23,6 +23,6 @@ $dataToView["data"] = array();
 if(method_exists($controller, $_GET["action"])) $dataToView["data"] = $controller -> {$_GET["action"]}();
 
 require_once 'view/layout/header.php';
-require_once 'view/' . ucfirst($_GET["controller"]) . '/' . $controller -> view . '.html.php';
+require_once 'view/' . lcfirst($_GET["controller"]) . '/' . $controller -> view . '.html.php';
 require_once 'view/layout/footer.php';
 ?>
