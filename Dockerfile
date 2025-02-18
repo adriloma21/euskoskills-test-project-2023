@@ -19,7 +19,7 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 # Establecer permisos de escritura en el directorio de imágenes
-RUN chmod -R 775 /var/www/html/recursos/images
+RUN chmod -R 775 /recursos/images
 
 # Opcional: configura ServerName para eliminar la advertencia de Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
