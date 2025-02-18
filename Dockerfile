@@ -16,8 +16,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Crear la carpeta recursos/images y establecer permisos adecuados
-RUN mkdir -p /var/www/html/recursos/images && \
-    chown -R www-data:www-data /var/www/html && \
+RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 775 /var/www/html/recursos/images
 
 # Opcional: configura ServerName para eliminar la advertencia de Apache
