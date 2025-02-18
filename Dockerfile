@@ -14,10 +14,10 @@ WORKDIR /var/www/html
 # Copia el código de la aplicación al contenedor
 COPY . /var/www/html
 
-# Crear la carpeta recursos/images antes de asignar permisos
+# Crear la carpeta recursos/images y asignar permisos
 RUN mkdir -p /var/www/html/recursos/images && \
-    chown -R www-data:www-data /var/www/html/recursos
-    chmod -R 775 /var/www/html/recursos
+    chown -R www-data:www-data /var/www/html && \
+    chmod -R 775 /var/www/html
 
 # Opcional: configura ServerName para eliminar la advertencia de Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
