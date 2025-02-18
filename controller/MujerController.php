@@ -104,11 +104,13 @@ class MujerController
             if (isset($_FILES['fotografia']) && $_FILES['fotografia']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['fotografia']['tmp_name'];
                 $fileName = $_FILES['fotografia']['name'];
-                $uploadFileDir = __DIR__ . '/../recursos/images/';
+                $uploadFileDir = '/recursos/images/';
                 $destPath = $uploadFileDir . $fileName;
 
+
                 if (!is_dir($uploadFileDir)) {
-                    mkdir($uploadFileDir, 0777, true);
+                    mkdir($uploadFileDir, 0777, true); // Crea la carpeta con permisos máximos
+                    chmod($uploadFileDir, 0777); // Asegurar permisos después de crearla
                 }
 
                 if (move_uploaded_file($fileTmpPath, $destPath)) {
