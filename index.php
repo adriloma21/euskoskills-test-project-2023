@@ -7,6 +7,12 @@ require_once 'model/db.php';
 //$userC = new UsuarioController();
 //$userC -> register();
 
+$request_uri = trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/");
+
+$segments = explode("/", $request_uri);
+
+print_r($segments);
+
 if(!isset($_GET["controller"])) $_GET["controller"] = constant("DEFAULT_CONTROLLER");
 if(!isset($_GET["action"])) $_GET["action"] = constant("DEFAULT_ACTION");
 
